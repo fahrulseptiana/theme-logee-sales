@@ -1,7 +1,5 @@
 name: Transform Tokens
-on:
-  repository_dispatch:
-    types: ['token_build']
+on: workflow_dispatch
 
 jobs:
   build:
