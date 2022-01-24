@@ -44,8 +44,8 @@ jobs:
           registry-url: 'http://legion.sytes.net:4873'
       - name: Publish
         run: |
-            yarn unpublish @legion-ui/theme-logee-sales -f
-            yarn publish
+              npm unpublish @legion-ui/theme-logee-sales --force
+              yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.VERDACCIO_TOKEN }}
       - name: Saving changes
