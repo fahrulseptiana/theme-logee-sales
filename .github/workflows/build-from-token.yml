@@ -30,7 +30,9 @@ jobs:
           default: prerelease
       - name: Install
         if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: yarn install
+        run: |
+          rm -fo yarn.lock
+          yarn install --registry http://legion.sytes.net:4873/
       - name: Updating submodules
         run: git submodule update --recursive --remote
       - name: Build
@@ -41,7 +43,9 @@ jobs:
           node-version: 14.x
           registry-url: 'http://legion.sytes.net:4873'
       - name: Publish
-        run: yarn publish
+        run: |
+            yarn unpublish @legion-ui/theme-logee-sales -f
+            yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.VERDACCIO_TOKEN }}
       - name: Saving changes
