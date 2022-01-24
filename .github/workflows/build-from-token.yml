@@ -30,9 +30,7 @@ jobs:
           default: prerelease
       - name: Install
         if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: |
-          rm -rf yarn.lock
-          yarn install --registry http://legion.sytes.net:4873/
+        run: yarn install --force
       - name: Updating submodules
         run: git submodule update --recursive --remote
       - name: Build
