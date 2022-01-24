@@ -1,0 +1,46 @@
+name: Transform Tokens
+on:
+  repository_dispatch:
+    types: ['token_build']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: 12.x-${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name:  'Automated Version Bump'
+        uses:  'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          default: prerelease
+      - name: Install
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Setup Node ${{ matrix.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          registry-url: 'http://legion.sytes.net:4873'
+      - name: Publish
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.VERDACCIO_TOKEN }}
