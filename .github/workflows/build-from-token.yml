@@ -56,3 +56,4 @@ jobs:
           workflow: Chromatic
           repo: fahrulseptiana/legion-testing
           token: ${{ secrets.PAT_TOKEN }}
+          inputs: '{ "sha": "0fd8d7c1eed2c545c9d7f4da64c22ed096d15cd3", "ref": "refs/heads/master" }'
