@@ -50,3 +50,9 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "update: submodules"
+      - name: Invoke workflow in another repo
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Chromatic
+          repo: fahrulseptiana/legion-testing
+          token: ${{ secrets.PAT_TOKEN }}
